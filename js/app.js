@@ -92,3 +92,42 @@ $(document).ready( function() {
 		getUnanswered(tags);
 	});
 });
+
+/*Get Inspired*/
+
+var getTopAnswerers = function(terms){
+
+	var myUrl = "http://api.stackexchange.com/2.2/tags/"+terms+"/top-answerers/month?site=stackoverflow";
+	
+	$.ajax({
+		url: myUrl,
+		dataType: "jsonp",//use jsonp to avoid cross origin issues
+		type: "GET"
+	})
+	.done(function(result){ //this waits for the ajax to return with a succesful promise object
+
+		console.log(result);
+		/*var searchResults = showSearchResults(request.tagged, result.items.length);
+
+		$('.search-results').html(searchResults);
+		//$.each is a higher order function. It takes an array and a function as an argument.
+		//The function is executed once for each item in the array.
+		$.each(result.items, function(i, item) {
+			var question = showQuestion(item);
+			$('.results').append(question);
+		});*/
+	})
+	.fail(function(jqXHR, error){ //this waits for the ajax to return with an error promise object
+		var errorElem = showError(error);
+		$('.search-results').append(errorElem);
+	});
+}
+
+$(document).ready(function(){
+	$('.inspiration-getter').submit(function(event){
+		event.preventDefault();
+
+		var tags = $(this).find("input[name='answerers']").val();
+		getTopAnswerers(tags);
+	});
+});

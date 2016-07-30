@@ -45,3 +45,16 @@
 	background-color: #F78181;
 	padding: 1em;
 }
+/*Inspired css styling*/
+.col-4{
+	width: 25%;
+	float: left;
+}
+.col-8{
+	width: 75%;
+	float: left;
+}
+
+.inspired{
+	padding: 15px 0;
+}
