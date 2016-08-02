@@ -118,7 +118,7 @@ $(document).ready( function() {
 		// zero out results if previous search has run
 		$('.results').html('');
 		// get the value of the tags the user submitted
-		var terms = $(this).find("input[name='tags']").val();
+		var terms = $(this).find("input[name='answerers']").val();
 		getTopAnswerers(terms);
 	});
 
@@ -138,9 +138,9 @@ var getTopAnswerers = function(terms){
 	})
 	.done(function(result){ //this waits for the ajax to return with a succesful promise object
 
-		//var searchResults = showSearchResults(newQuery, result.items.length);
+		var searchResults = showSearchResults(newQuery, result.items.length);
 
-		//$('.search-results').html(searchResults);
+		$('.search-results').html(searchResults);
 		//$.each is a higher order function. It takes an array and a function as an argument.
 		//The function is executed once for each item in the array.
 		$.each(result.items, function(i, item) {
