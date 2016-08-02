@@ -31,6 +31,25 @@ var showQuestion = function(question) {
 	return result;
 };
 
+var showInspire = function(subject){
+
+	//clone user template code
+	var newUser = $('.templates .inspired').clone();
+
+	//Set image of answerer
+	var imageElem = newUser.find('.user-image img');
+	imageElem.attr('src', subject.profile_image);
+
+	//Set answerers name and link to Bio
+	var answererName = newUser.find('user-info a');
+	answererName.attr('href', subject.link);
+	answererName.text(subject.display_name);
+
+	//set reputation and accept rate
+	var answerersDetails = newUser.find('user-info');
+	answerersDetails.append("<h4>Reputation: "+ subject.reputation +"</h4><h4>Accept Rate: "+ subject.accept_rate +"</h4>")
+}
+
 
 // this function takes the results object from StackOverflow
 // and returns the number of results and tags to be appended to DOM
@@ -91,6 +110,16 @@ $(document).ready( function() {
 		var tags = $(this).find("input[name='tags']").val();
 		getUnanswered(tags);
 	});
+	$('.inspiration-getter').submit( function(event){
+		event.preventDefault();
+		// zero out results if previous search has run
+		$('.results').html('');
+		// get the value of the tags the user submitted
+		var terms = $(this).find("input[name='tags']").val();
+		getTopAnswerers(terms);
+	});
+
+
 });
 
 /*Get Inspired*/
@@ -98,7 +127,7 @@ $(document).ready( function() {
 var getTopAnswerers = function(terms){
 
 	var myUrl = "http://api.stackexchange.com/2.2/tags/"+terms+"/top-answerers/month?site=stackoverflow";
-	
+	var newQuery = terms;
 	$.ajax({
 		url: myUrl,
 		dataType: "jsonp",//use jsonp to avoid cross origin issues
@@ -106,16 +135,16 @@ var getTopAnswerers = function(terms){
 	})
 	.done(function(result){ //this waits for the ajax to return with a succesful promise object
 
-		console.log(result);
-		/*var searchResults = showSearchResults(request.tagged, result.items.length);
+		console.log(result.items);
+		var searchResults = showSearchResults(newQuery, result.items.length);
 
 		$('.search-results').html(searchResults);
 		//$.each is a higher order function. It takes an array and a function as an argument.
 		//The function is executed once for each item in the array.
 		$.each(result.items, function(i, item) {
-			var question = showQuestion(item);
-			$('.results').append(question);
-		});*/
+			var newAnswerer = showInspire(item);
+			$('.results').append(newAnswerer);
+		});
 	})
 	.fail(function(jqXHR, error){ //this waits for the ajax to return with an error promise object
 		var errorElem = showError(error);
@@ -123,11 +152,3 @@ var getTopAnswerers = function(terms){
 	});
 }
 
-$(document).ready(function(){
-	$('.inspiration-getter').submit(function(event){
-		event.preventDefault();
-
-		var tags = $(this).find("input[name='answerers']").val();
-		getTopAnswerers(tags);
-	});
-});
