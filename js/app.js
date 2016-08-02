@@ -38,17 +38,20 @@ var showInspire = function(subject){
 
 	//Set image of answerer
 	var imageElem = newUser.find('.user-image img');
-	imageElem.attr('src', subject.profile_image);
+	imageElem.attr('src', subject.user.profile_image);
 
 	//Set answerers name and link to Bio
-	var answererName = newUser.find('user-info a');
-	answererName.attr('href', subject.link);
-	answererName.text(subject.display_name);
+	console.log(subject.user.display_name);
+	var answererName = newUser.find('.user-info a');
+	answererName.attr('href', subject.user.link);
+	answererName.text(subject.user.display_name);
 
 	//set reputation and accept rate
-	var answerersDetails = newUser.find('user-info');
-	answerersDetails.append("<h4>Reputation: "+ subject.reputation +"</h4><h4>Accept Rate: "+ subject.accept_rate +"</h4>")
-}
+	var answerersDetails = newUser.find('.user-info');
+	answerersDetails.append("<h4>Reputation: "+ subject.user.reputation +"</h4><h4>Accept Rate: "+ subject.user.accept_rate +"</h4>")
+
+	return newUser;
+};
 
 
 // this function takes the results object from StackOverflow
@@ -135,10 +138,9 @@ var getTopAnswerers = function(terms){
 	})
 	.done(function(result){ //this waits for the ajax to return with a succesful promise object
 
-		console.log(result.items);
-		var searchResults = showSearchResults(newQuery, result.items.length);
+		//var searchResults = showSearchResults(newQuery, result.items.length);
 
-		$('.search-results').html(searchResults);
+		//$('.search-results').html(searchResults);
 		//$.each is a higher order function. It takes an array and a function as an argument.
 		//The function is executed once for each item in the array.
 		$.each(result.items, function(i, item) {
